@@ -3,6 +3,10 @@ package marumasa.ip_sheet;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
+
+
+import java.net.http.HttpResponse;
 
 public class eventListener implements Listener {
 
@@ -17,8 +21,9 @@ public class eventListener implements Listener {
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         final String LoginIP = getIP(String.valueOf(event.getAddress()));
-        final String getData = String.valueOf(request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP));
-        event.setKickMessage(getData);
+        mc.getLogger().info(LoginIP);
+        final HttpResponse<String> getData = request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP);
+        event.disallow(Result.KICK_OTHER, String.valueOf(getData));
 
         mc.getLogger().info(LoginIP);
     }
