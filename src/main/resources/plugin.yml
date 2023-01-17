@@ -1,0 +1,4 @@
+name: IPSheet
+version: '${version}'
+main: marumasa.ip_sheet.minecraft
+api-version: 1.19
