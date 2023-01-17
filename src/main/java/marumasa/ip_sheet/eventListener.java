@@ -2,7 +2,7 @@ package marumasa.ip_sheet;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 public class eventListener implements Listener {
 
@@ -15,7 +15,7 @@ public class eventListener implements Listener {
     }
 
     @EventHandler
-    public void onLogin(AsyncPlayerPreLoginEvent event) {
+    public void onLogin(PlayerLoginEvent event) {
         final String LoginIP = getIP(String.valueOf(event.getAddress()));
         final String getData = String.valueOf(request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP));
         event.setKickMessage(getData);
