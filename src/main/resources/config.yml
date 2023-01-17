@@ -1,2 +1,3 @@
 URL: "Google Apps Script URL"
 KickMessage: "Your IP is not allowed."
+ErrorMessage: "Unable to access database."

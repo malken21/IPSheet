@@ -2,10 +2,8 @@ package marumasa.ip_sheet;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
-
-import java.net.http.HttpResponse;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 public class eventListener implements Listener {
 
@@ -18,16 +16,24 @@ public class eventListener implements Listener {
     }
 
     @EventHandler
-    public void onLogin(PlayerLoginEvent event) {
+    public void onLogin(AsyncPlayerPreLoginEvent event) {
         final String LoginIP = getIP(String.valueOf(event.getAddress()));
-        mc.getLogger().info(LoginIP);
-        final HttpResponse<String> getData = request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP);
-        event.disallow(Result.KICK_OTHER, cfg.KickMessage);
 
-        mc.getLogger().info(LoginIP);
+        final String getJSON = request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP);
+        if (getJSON == null) {
+            event.disallow(Result.KICK_OTHER, cfg.ErrorMessage);
+            sendLogger(LoginIP, cfg.ErrorMessage);
+        } else if (getJSON.contains("false")) {
+            event.disallow(Result.KICK_OTHER, cfg.KickMessage);
+            sendLogger(LoginIP, cfg.KickMessage);
+        }
     }
 
     private String getIP(String data) {
         return data.split("/")[1].split(":")[0];
+    }
+
+    private void sendLogger(String LoginIP, String text) {
+        mc.getLogger().info("[" + LoginIP + "] " + text);
     }
 }
