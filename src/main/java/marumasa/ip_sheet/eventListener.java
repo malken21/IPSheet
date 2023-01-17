@@ -5,7 +5,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
-
 import java.net.http.HttpResponse;
 
 public class eventListener implements Listener {
@@ -23,7 +22,7 @@ public class eventListener implements Listener {
         final String LoginIP = getIP(String.valueOf(event.getAddress()));
         mc.getLogger().info(LoginIP);
         final HttpResponse<String> getData = request.get(cfg.URL + "?type=isAllow&ip=" + LoginIP);
-        event.disallow(Result.KICK_OTHER, String.valueOf(getData));
+        event.disallow(Result.KICK_OTHER, cfg.KickMessage);
 
         mc.getLogger().info(LoginIP);
     }
